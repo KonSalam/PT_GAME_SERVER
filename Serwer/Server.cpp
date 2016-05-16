@@ -1,46 +1,6 @@
 #include "Server.h"
 #include <thread>
 
-void Server::init()
-{
-	client.resize(MAX_CLIENTS);
-	std::cout << "Intializing Winsock..." << std::endl;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
-
-	//Setup hints
-	ZeroMemory(&hints, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-	hints.ai_flags = AI_PASSIVE;
-
-	//Setup Server
-	std::cout << "Setting up server..." << std::endl;
-	getaddrinfo(static_cast<LPCTSTR>(IP_ADDRESS), DEFAULT_PORT, &hints, &server);
-
-	//Create a listening socket for connecting to server
-	std::cout << "Creating server socket..." << std::endl;
-	server_socket = socket(server->ai_family, server->ai_socktype, server->ai_protocol);
-
-	//Setup socket options
-	setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &OPTION_VALUE, sizeof(int)); //Make it possible to re-bind to a port that was used within the last 2 minutes
-	setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, &OPTION_VALUE, sizeof(int)); //Used for interactive programs
-
-	//Assign an address to the server socket.
-	std::cout << "Binding socket..." << std::endl;
-	bind(server_socket, server->ai_addr, (int)server->ai_addrlen);
-
-	//Listen for incoming connections.
-	std::cout << "Listening..." << std::endl;
-	listen(server_socket, SOMAXCONN);
-
-	//Initialize the client list
-	for (int i = 0; i < MAX_CLIENTS; i++)
-	{
-		client[i] = { -1, INVALID_SOCKET };
-	}
-}
-
 int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread)
 {
 	std::string msg = "";
@@ -110,6 +70,46 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 	return 0;
 }
 
+void Server::init()
+{
+	client.resize(MAX_CLIENTS);
+	std::cout << "Intializing Winsock..." << std::endl;
+	WSAStartup(MAKEWORD(2, 2), &wsaData);
+
+	//Setup hints
+	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+	hints.ai_flags = AI_PASSIVE;
+
+	//Setup Server
+	std::cout << "Setting up server..." << std::endl;
+	getaddrinfo(static_cast<LPCTSTR>(IP_ADDRESS), DEFAULT_PORT, &hints, &server);
+
+	//Create a listening socket for connecting to server
+	std::cout << "Creating server socket..." << std::endl;
+	server_socket = socket(server->ai_family, server->ai_socktype, server->ai_protocol);
+
+	//Setup socket options
+	setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &OPTION_VALUE, sizeof(int)); //Make it possible to re-bind to a port that was used within the last 2 minutes
+	setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, &OPTION_VALUE, sizeof(int)); //Used for interactive programs
+
+	//Assign an address to the server socket.
+	std::cout << "Binding socket..." << std::endl;
+	bind(server_socket, server->ai_addr, (int)server->ai_addrlen);
+
+	//Listen for incoming connections.
+	std::cout << "Listening..." << std::endl;
+	listen(server_socket, SOMAXCONN);
+
+	//Initialize the client list
+	for (int i = 0; i < MAX_CLIENTS; i++)
+	{
+		client[i] = { -1, INVALID_SOCKET };
+	}
+}
+
 void Server::run()
 {
 	std::string msg = "";
@@ -135,8 +135,6 @@ void Server::run()
 
 			if (client[i].socket != INVALID_SOCKET)
 				num_clients++;
-
-			//std::cout << client[i].socket << std::endl;
 		}
 
 		if (temp_id != -1)
@@ -169,7 +167,5 @@ void Server::run()
 	//Clean up Winsock
 	WSACleanup();
 	std::cout << "Program has ended successfully" << std::endl;
-
-
 
 }

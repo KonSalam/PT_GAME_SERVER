@@ -29,15 +29,16 @@ private:
 	WSADATA wsaData;
 	struct addrinfo hints;
 	struct addrinfo *server = NULL;
-	SOCKET server_socket = INVALID_SOCKET;
+	SOCKET server_socket;
 	std::vector<client_type> client;
 	std::thread my_thread[MAX_CLIENTS];
+	Tank tanks[MAX_CLIENTS];
 
-	int num_clients = 0;
-	int temp_id = -1;
-	Tank tanks[MAX_CLIENTS] = { Tank(0, 0), Tank(0, 500), Tank(500, 0), Tank(500, 500) };;
-
+	int num_clients;
+	int temp_id;
+	
 public:
+	Server();
 	void init();//inicjazliacja servera
 	void run();
 };

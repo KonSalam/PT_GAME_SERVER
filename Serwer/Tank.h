@@ -9,6 +9,7 @@ private:
 	bool whichClient;
 
 public:
+	Tank();
 	Tank(int x1, int y2);
 	int getX();
 	void setX(int x2);

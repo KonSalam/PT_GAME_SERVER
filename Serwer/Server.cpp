@@ -1,73 +1,14 @@
 #include "Server.h"
 #include <thread>
 
-int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread)
+int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread);
+
+Server::Server()
 {
-	std::string msg = "";
-	char tempmsg[DEFAULT_BUFLEN] = "";
-
-	//Session
-	while (1)
-	{
-		memset(tempmsg, 0, DEFAULT_BUFLEN);
-
-		if (new_client.socket != 0)
-		{
-			int iResult = recv(new_client.socket, tempmsg, DEFAULT_BUFLEN, 0);
-
-			if (iResult != SOCKET_ERROR)
-			{
-				/*if (strcmp("", tempmsg))
-				msg = "Client #" + std::to_string(new_client.id) + ": " + tempmsg;
-				std::cout << msg.c_str() << std::endl;*/
-
-				if (strcmp(tempmsg, "72") == 0)//gora
-				{
-					msg = "g " + std::to_string(new_client.id);
-				}
-				else if (strcmp(tempmsg, "80") == 0)//dol
-				{
-					msg = "d " + std::to_string(new_client.id);
-				}
-				else if (strcmp(tempmsg, "75") == 0)//lewo
-				{
-					msg = "l " + std::to_string(new_client.id);
-				}
-				else if (strcmp(tempmsg, "77") == 0)//prawo
-				{
-					msg = "p " + std::to_string(new_client.id);
-				}
-
-				//Broadcast that message to the other clients
-				for (int i = 0; i < MAX_CLIENTS; i++)
-				{
-					if (client_array[i].socket != INVALID_SOCKET)
-						iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
-				}
-			}
-			else
-			{
-				msg = "Client #" + std::to_string(new_client.id) + " Disconnected";
-				std::cout << msg << std::endl;
-
-				closesocket(new_client.socket);
-				closesocket(client_array[new_client.id].socket);
-				client_array[new_client.id].socket = INVALID_SOCKET;
-
-				//Broadcast the disconnection message to the other clients
-				for (int i = 0; i < MAX_CLIENTS; i++)
-				{
-					if (client_array[i].socket != INVALID_SOCKET)
-						iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
-				}
-
-				break;
-			}
-		}
-	} //end while
-
-	thread.detach();
-	return 0;
+	Tank tanks[MAX_CLIENTS] = { Tank(0, 0), Tank(0, 500), Tank(500, 0), Tank(500, 500) };
+	server_socket = INVALID_SOCKET;	
+	num_clients = 0;
+	temp_id = -1;
 }
 
 void Server::init()
@@ -168,4 +109,74 @@ void Server::run()
 	WSACleanup();
 	std::cout << "Program has ended successfully" << std::endl;
 
+}
+
+int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread)
+{
+	std::string msg = "";
+	char tempmsg[DEFAULT_BUFLEN] = "";
+
+	//Session
+	while (1)
+	{
+		memset(tempmsg, 0, DEFAULT_BUFLEN);
+
+		if (new_client.socket != 0)
+		{
+			int iResult = recv(new_client.socket, tempmsg, DEFAULT_BUFLEN, 0);
+
+			if (iResult != SOCKET_ERROR)
+			{
+				/*if (strcmp("", tempmsg))
+				msg = "Client #" + std::to_string(new_client.id) + ": " + tempmsg;
+				std::cout << msg.c_str() << std::endl;*/
+
+				if (strcmp(tempmsg, "72") == 0)//gora
+				{
+					msg = "g " + std::to_string(new_client.id);
+				}
+				else if (strcmp(tempmsg, "80") == 0)//dol
+				{
+					msg = "d " + std::to_string(new_client.id);
+				}
+				else if (strcmp(tempmsg, "75") == 0)//lewo
+				{
+					msg = "l " + std::to_string(new_client.id);
+				}
+				else if (strcmp(tempmsg, "77") == 0)//prawo
+				{
+					msg = "p " + std::to_string(new_client.id);
+				}
+
+				std::cout << msg << std::endl;
+				//Broadcast that message to the other clients
+				for (int i = 0; i < MAX_CLIENTS; i++)
+				{
+					if (client_array[i].socket != INVALID_SOCKET)
+						iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
+				}
+			}
+			else
+			{
+				msg = "Client #" + std::to_string(new_client.id) + " Disconnected";
+				std::cout << msg << std::endl;
+
+				closesocket(new_client.socket);
+				closesocket(client_array[new_client.id].socket);
+				client_array[new_client.id].socket = INVALID_SOCKET;
+
+				//Broadcast the disconnection message to the other clients
+				for (int i = 0; i < MAX_CLIENTS; i++)
+				{
+					if (client_array[i].socket != INVALID_SOCKET)
+						iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
+				}
+
+				break;
+			}
+		}
+	} //end while
+
+	thread.detach();
+	return 0;
 }

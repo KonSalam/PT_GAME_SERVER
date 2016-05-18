@@ -6,7 +6,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 Server::Server()
 {
 	Tank tanks[MAX_CLIENTS] = { Tank(0, 0), Tank(0, 500), Tank(500, 0), Tank(500, 500) };
-	server_socket = INVALID_SOCKET;	
+	server_socket = INVALID_SOCKET;
 	num_clients = 0;
 	temp_id = -1;
 }
@@ -73,7 +73,6 @@ void Server::run()
 				client[i].id = i;
 				temp_id = i;
 			}
-
 			if (client[i].socket != INVALID_SOCKET)
 				num_clients++;
 		}
@@ -97,7 +96,6 @@ void Server::run()
 	}
 
 	closesocket(server_socket);
-
 	//Close client socket
 	for (int i = 0; i < MAX_CLIENTS; i++)
 	{
@@ -108,7 +106,15 @@ void Server::run()
 	//Clean up Winsock
 	WSACleanup();
 	std::cout << "Program has ended successfully" << std::endl;
+}
 
+void sent_message(std::vector<client_type> &client_array, int iResult, std::string msg)
+{
+	for (int i = 0; i < MAX_CLIENTS; i++)
+	{
+		if (client_array[i].socket != INVALID_SOCKET)
+			iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
+	}
 }
 
 int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread)
@@ -116,7 +122,6 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 	std::string msg = "";
 	char tempmsg[DEFAULT_BUFLEN] = "";
 
-	//Session
 	while (1)
 	{
 		memset(tempmsg, 0, DEFAULT_BUFLEN);
@@ -127,10 +132,6 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 
 			if (iResult != SOCKET_ERROR)
 			{
-				/*if (strcmp("", tempmsg))
-				msg = "Client #" + std::to_string(new_client.id) + ": " + tempmsg;
-				std::cout << msg.c_str() << std::endl;*/
-
 				if (strcmp(tempmsg, "72") == 0)//gora
 				{
 					msg = "g " + std::to_string(new_client.id);
@@ -149,12 +150,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				}
 
 				std::cout << msg << std::endl;
-				//Broadcast that message to the other clients
-				for (int i = 0; i < MAX_CLIENTS; i++)
-				{
-					if (client_array[i].socket != INVALID_SOCKET)
-						iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
-				}
+				sent_message(client_array, iResult, msg);
 			}
 			else
 			{
@@ -165,18 +161,11 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				closesocket(client_array[new_client.id].socket);
 				client_array[new_client.id].socket = INVALID_SOCKET;
 
-				//Broadcast the disconnection message to the other clients
-				for (int i = 0; i < MAX_CLIENTS; i++)
-				{
-					if (client_array[i].socket != INVALID_SOCKET)
-						iResult = send(client_array[i].socket, msg.c_str(), strlen(msg.c_str()), 0);
-				}
-
+				sent_message(client_array, iResult, msg);
 				break;
 			}
 		}
-	} //end while
-
+	}
 	thread.detach();
 	return 0;
 }

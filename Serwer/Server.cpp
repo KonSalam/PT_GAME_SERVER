@@ -1,7 +1,7 @@
 #include "Server.h"
 #include <thread>
 
-int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread);
+int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread, Tank tanks[]);
 
 Server::Server()
 {
@@ -85,7 +85,7 @@ void Server::run()
 			send(client[temp_id].socket, msg.c_str(), strlen(msg.c_str()), 0);
 
 			//Create a thread process for that client
-			my_thread[temp_id] = std::thread(process_client, std::ref(client[temp_id]), std::ref(client), std::ref(my_thread[temp_id]));
+			my_thread[temp_id] = std::thread(process_client, std::ref(client[temp_id]), std::ref(client), std::ref(my_thread[temp_id]), tanks);
 		}
 		else
 		{
@@ -117,7 +117,7 @@ void sent_message(std::vector<client_type> &client_array, int iResult, std::stri
 	}
 }
 
-int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread)
+int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread, Tank tanks[])
 {
 	std::string msg = "";
 	char tempmsg[DEFAULT_BUFLEN] = "";
@@ -125,7 +125,6 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 	while (1)
 	{
 		memset(tempmsg, 0, DEFAULT_BUFLEN);
-
 		if (new_client.socket != 0)
 		{
 			int iResult = recv(new_client.socket, tempmsg, DEFAULT_BUFLEN, 0);
@@ -134,23 +133,27 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 			{
 				if (strcmp(tempmsg, "72") == 0)//gora
 				{
-					msg = "g " + std::to_string(new_client.id);
+					tanks[new_client.id].setY(tanks[new_client.id].getY() - 5);
 				}
 				else if (strcmp(tempmsg, "80") == 0)//dol
 				{
-					msg = "d " + std::to_string(new_client.id);
+					tanks[new_client.id].setY(tanks[new_client.id].getY() + 5);
 				}
 				else if (strcmp(tempmsg, "75") == 0)//lewo
 				{
-					msg = "l " + std::to_string(new_client.id);
+					tanks[new_client.id].setX(tanks[new_client.id].getX() - 5);
 				}
 				else if (strcmp(tempmsg, "77") == 0)//prawo
 				{
-					msg = "p " + std::to_string(new_client.id);
+					tanks[new_client.id].setX(tanks[new_client.id].getX() + 5);
 				}
 
-				std::cout << msg << std::endl;
-				sent_message(client_array, iResult, msg);
+				for (int i = 0; i < 4;i++)
+				{
+					Sleep(3);
+					msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY());
+					sent_message(client_array, iResult, msg);	
+				}
 			}
 			else
 			{

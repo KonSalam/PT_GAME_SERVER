@@ -51,6 +51,7 @@ void Server::init()
 	}
 }
 
+
 void Server::run()
 {
 	std::string msg = "";
@@ -125,6 +126,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 	while (1)
 	{
 		memset(tempmsg, 0, DEFAULT_BUFLEN);
+
 		if (new_client.socket != 0)
 		{
 			int iResult = recv(new_client.socket, tempmsg, DEFAULT_BUFLEN, 0);
@@ -148,12 +150,8 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 					tanks[new_client.id].setX(tanks[new_client.id].getX() + 5);
 				}
 
-				for (int i = 0; i < 4;i++)
-				{
-					Sleep(3);
-					msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY());
-					sent_message(client_array, iResult, msg);	
-				}
+				msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY());
+				sent_message(client_array, iResult, msg);
 			}
 			else
 			{
@@ -164,7 +162,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				closesocket(client_array[new_client.id].socket);
 				client_array[new_client.id].socket = INVALID_SOCKET;
 
-				sent_message(client_array, iResult, msg);
+				//sent_message(client_array, iResult, msg);
 				break;
 			}
 		}

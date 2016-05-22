@@ -10,7 +10,7 @@
 #include "Tank.h"
 
 #pragma comment (lib, "Ws2_32.lib")
-#define IP_ADDRESS "127.0.0.1"
+#define IP_ADDRESS "192.168.1.107"
 #define DEFAULT_PORT "2556"
 #define DEFAULT_BUFLEN 1024
 

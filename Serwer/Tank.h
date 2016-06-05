@@ -6,15 +6,17 @@ class Tank
 private:
 	int x;
 	int y;
+	int life;
 	bool whichClient;
 
 public:
 	Tank();
 	Tank(int x1, int y2);
-	int getX();
 	void setX(int x2);
-	int getY();
 	void setY(int y2);
-
+	void setLife();
+	int getX();
+	int getY();
+	int getLife();
 };
 #endif

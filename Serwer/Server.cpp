@@ -5,7 +5,10 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 
 Server::Server()
 {
-	Tank tanks[MAX_CLIENTS] = { Tank(0, 0), Tank(0, 500), Tank(500, 0), Tank(500, 500) };
+	tanks[0] = Tank(0, 0);
+	tanks[1] = Tank(0, 500);
+	tanks[2] = Tank(500, 0);
+	tanks[3] = Tank(500, 500);
 	server_socket = INVALID_SOCKET;
 	num_clients = 0;
 	temp_id = -1;
@@ -109,6 +112,24 @@ void Server::run()
 	std::cout << "Program has ended successfully" << std::endl;
 }
 
+void disconnected(int id, Tank tanks[])
+{
+	switch (id){
+	case 0:
+		tanks[0] = Tank(0, 0);
+		break;
+	case 1:
+		tanks[0] = Tank(0, 500);
+		break;
+	case 2:
+		tanks[0] = Tank(500, 0);
+		break;
+	case 3:
+		tanks[0] = Tank(500, 500);
+		break;
+	}
+}
+
 void sent_message(std::vector<client_type> &client_array, int iResult, std::string msg)
 {
 	for (int i = 0; i < MAX_CLIENTS; i++)
@@ -157,12 +178,11 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 			{
 				msg = "Client #" + std::to_string(new_client.id) + " Disconnected";
 				std::cout << msg << std::endl;
+				disconnected(new_client.id, tanks);
 
 				closesocket(new_client.socket);
 				closesocket(client_array[new_client.id].socket);
 				client_array[new_client.id].socket = INVALID_SOCKET;
-
-				//sent_message(client_array, iResult, msg);
 				break;
 			}
 		}

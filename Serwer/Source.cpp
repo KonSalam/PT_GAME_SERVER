@@ -5,7 +5,6 @@ int main()
 	Server server;
 	server.init();
 	server.run();
-
 	system("pause");
 	return 0;
 }

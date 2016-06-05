@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerNetwork.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Tank.cpp" />
   </ItemGroup>

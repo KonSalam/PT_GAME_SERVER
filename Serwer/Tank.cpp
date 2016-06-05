@@ -5,11 +5,12 @@ Tank::Tank()
 {
 }
 
-Tank::Tank(int x1, int y1)
+Tank::Tank(int x1, int y1,int c)
 {
 	x = x1;
 	y = y1;
 	life = 2;
+	course = c;
 	whichClient = false;
 }
 
@@ -42,6 +43,11 @@ void Tank::setLife()
 	life = life - 1;
 }
 
+void Tank::setCourse(int c)
+{
+	course = c;
+}
+
 int Tank::getX()
 {
 	return x;
@@ -55,4 +61,9 @@ int Tank::getY()
 int Tank::getLife()
 {
 	return life;
+}
+
+int Tank::getCourse()
+{
+	return course;
 }

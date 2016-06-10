@@ -4,8 +4,8 @@
 Server::Server()
 {
 	tanks[0] = Tank(0, 0, 1);
-	tanks[1] = Tank(0, 500, 1);
-	tanks[2] = Tank(500, 0, 2);
+	tanks[1] = Tank(0, 500, 2);
+	tanks[2] = Tank(500, 0, 1);
 	tanks[3] = Tank(500, 500, 2);
 	server_socket = INVALID_SOCKET;
 	num_clients = 0;
@@ -83,10 +83,17 @@ void Server::run()
 			//Send the id to that client
 			std::cout << "Client #" << client[temp_id].id << " Accepted" << std::endl;
 			msg = std::to_string(client[temp_id].id);
+
 			send(client[temp_id].socket, msg.c_str(), strlen(msg.c_str()), 0);
 
 			//Create a thread process for that client
 			my_thread[temp_id] = std::thread(process_client, std::ref(client[temp_id]), std::ref(client), std::ref(my_thread[temp_id]), tanks);
+			for (int i = 0; i < 4; i++){
+				msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY()) + " " + std::to_string(tanks[i].getCourse());
+				//std::cout <<msg<< std::endl;
+				Sleep(160);
+				send(client[temp_id].socket, msg.c_str(), strlen(msg.c_str()), 0);
+			}
 		}
 		else
 		{

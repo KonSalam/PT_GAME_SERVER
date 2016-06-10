@@ -127,7 +127,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 					//shoot(tanks, new_client.id);
 				}
 
-				msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY());
+				msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY()) + " " + std::to_string(tanks[new_client.id].getCourse());
 				sent_message(client_array, iResult, msg);
 			}
 			else

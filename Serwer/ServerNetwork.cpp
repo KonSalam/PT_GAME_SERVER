@@ -27,6 +27,54 @@ void sent_message(std::vector<client_type> &client_array, int iResult, std::stri
 	}
 }
 
+void shoot(Tank tanks[], int id)
+{
+	int i;
+	if (tanks[id].getCourse() == 1 || tanks[id].getCourse() == 2){
+		i = tanks[id].getY();
+	}
+	else{
+		i = tanks[id].getX();
+	}
+
+	if (tanks[id].getCourse() == 1 || tanks[id].getCourse() == 4){
+
+		for (i; i <= 500; i += 5)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				//if (i == tanks[j].getY())
+			}
+		}
+	}
+	else{
+		for (i; i >= 0; i -= 5)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+
+			}
+		}
+	}
+}
+
+bool colision(Tank tanks[], int id)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (i == id) continue;
+
+		if ((tanks[id].getX() >= tanks[i].getX() && tanks[id].getX()< (tanks[i].getX() + 50)) || (tanks[id].getX()>(tanks[i].getX() - 50) && tanks[id].getX() <= tanks[i].getX()))
+		{
+			if ((tanks[id].getY() >= tanks[i].getY() && tanks[id].getY() < (tanks[i].getY() + 50)) || (tanks[id].getY() > (tanks[i].getY() - 50) && tanks[id].getY() <= tanks[i].getY()))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread, Tank tanks[])
 {
 	std::string msg = "";
@@ -46,25 +94,37 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				{
 					tanks[new_client.id].setY(tanks[new_client.id].getY() - 5);
 					tanks[new_client.id].setCourse(2);
+					if (colision(tanks, new_client.id)){
+						tanks[new_client.id].setY(tanks[new_client.id].getY() + 5);
+					}
 				}
 				else if (strcmp(tempmsg, "80") == 0)//dol
 				{
 					tanks[new_client.id].setY(tanks[new_client.id].getY() + 5);
 					tanks[new_client.id].setCourse(1);
+					if (colision(tanks, new_client.id)){
+						tanks[new_client.id].setY(tanks[new_client.id].getY() - 5);
+					}
 				}
 				else if (strcmp(tempmsg, "75") == 0)//lewo
 				{
 					tanks[new_client.id].setX(tanks[new_client.id].getX() - 5);
 					tanks[new_client.id].setCourse(3);
+					if (colision(tanks, new_client.id)){
+						tanks[new_client.id].setX(tanks[new_client.id].getX() + 5);
+					}
 				}
 				else if (strcmp(tempmsg, "77") == 0)//prawo
 				{
 					tanks[new_client.id].setX(tanks[new_client.id].getX() + 5);
 					tanks[new_client.id].setCourse(4);
+					if (colision(tanks, new_client.id)){
+						tanks[new_client.id].setX(tanks[new_client.id].getX() - 5);
+					}
 				}
 				else if (strcmp(tempmsg, "115") == 0)//strzal
 				{
-
+					//shoot(tanks, new_client.id);
 				}
 
 				msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY());

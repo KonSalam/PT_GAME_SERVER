@@ -1,8 +1,6 @@
 #include "Server.h"
 #include <thread>
 
-int process_client(client_type &new_client, std::vector<client_type> &client_array, std::thread &thread, Tank tanks[]);
-
 Server::Server()
 {
 	tanks[0] = Tank(0, 0, 1);

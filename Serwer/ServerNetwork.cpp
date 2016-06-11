@@ -48,30 +48,67 @@ bool colision(Tank tanks[], int id)
 
 void shoot(Tank tanks[], int id)
 {
-	int i;
+	int i, p;
 	if (tanks[id].getCourse() == 1 || tanks[id].getCourse() == 2){
 		i = tanks[id].getY();
+		p = tanks[id].getX();
 	}
-	else{
+	else if (tanks[id].getCourse() == 3 || tanks[id].getCourse() == 4){
 		i = tanks[id].getX();
+		p = tanks[id].getY();
 	}
 
-	if (tanks[id].getCourse() == 1 || tanks[id].getCourse() == 4){
-
+	if (tanks[id].getCourse() == 1){
 		for (i; i <= 500; i += 5)
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				//if (i == tanks[j].getY())
+				if (id == j) continue;
+				if (i == tanks[j].getY() && p == tanks[j].getX())
+				{
+					std::cout << "TRAFILEM CHUJA " <<std::endl;
+					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
+					tanks[j].setLife();
+				}
 			}
 		}
 	}
-	else{
-		for (i; i >= 0; i -= 5)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-
+	else if (tanks[id].getCourse() == 2){
+		for (i; i >= 0; i -= 5){
+			for (int j = 0; j < 4; j++){
+				if (id == j) continue;
+				if (i == tanks[j].getY() && p == tanks[j].getX())
+				{
+					std::cout << "TRAFILEM CHUJA " <<std::endl;
+					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;	
+					tanks[j].setLife();
+				}
+			}
+		}
+	}
+	else if (tanks[id].getCourse() == 3){
+		for (i; i >= 0; i -= 5){
+			for (int j = 0; j < 4; j++){
+				if (id == j) continue;
+				if (i == tanks[j].getX() && p == tanks[j].getY())
+				{
+					std::cout << "TRAFILEM CHUJA " << std::endl;
+					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
+					tanks[j].setLife();
+				}
+			}
+		}
+	}
+	else if (tanks[id].getCourse() == 4){
+		for (i; i <= 500; i += 5){
+			for (int j = 0; j < 4; j++){
+				if (id == j) continue;
+				if (i == tanks[j].getX() && p == tanks[j].getY())
+				{
+					std::cout << "TRAFILEM CHUJA " << std::endl;
+					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
+					tanks[j].setLife();
+				}
 			}
 		}
 	}
@@ -126,7 +163,8 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				}
 				else if (strcmp(tempmsg, "115") == 0)//strzal
 				{
-					//shoot(tanks, new_client.id);
+					shoot(tanks, new_client.id);
+					continue;
 				}
 
 				msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY()) + " " + std::to_string(tanks[new_client.id].getCourse());

@@ -91,7 +91,7 @@ void Server::run()
 			for (int i = 0; i < 4; i++){
 				msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY()) + " " + std::to_string(tanks[i].getCourse());
 				//std::cout <<msg<< std::endl;
-				Sleep(160);
+				Sleep(150);
 				send(client[temp_id].socket, msg.c_str(), strlen(msg.c_str()), 0);
 			}
 		}

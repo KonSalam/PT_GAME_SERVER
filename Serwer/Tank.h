@@ -8,7 +8,6 @@ private:
 	int y;
 	int course; // 1- dol 2-gora 3- lewo 4- prawo
 	int life;
-	bool whichClient;
 
 public:
 	Tank();
@@ -16,6 +15,7 @@ public:
 	void setX(int x2);
 	void setY(int y2);
 	void setLife();
+	void setDead();
 	void setCourse(int c);
 	int getX();
 	int getY();

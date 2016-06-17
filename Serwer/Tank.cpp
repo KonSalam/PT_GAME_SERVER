@@ -46,6 +46,7 @@ void Tank::setDead()
 {
 	x = -100;
 	y = -100;
+	life = 0;
 }
 
 void Tank::setCourse(int c)

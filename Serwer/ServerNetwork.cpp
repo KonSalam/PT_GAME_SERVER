@@ -13,19 +13,19 @@ void disconnected(int id, Tank tanks[], int iResult, std::vector<client_type> &c
 {
 	switch (id){
 	case 0:
-		tanks[0] = Tank(0, 0, 1);
+		tanks[0].setDead();
 		break;
 	case 1:
-		tanks[1] = Tank(0, 500, 2);
+		tanks[1].setDead();
 		break;
 	case 2:
-		tanks[2] = Tank(500, 0, 1);
+		tanks[2].setDead();
 		break;
 	case 3:
-		tanks[3] = Tank(500, 500, 2);
+		tanks[3].setDead();
 		break;
 	}
-	std::string msg = std::to_string(id) + " " + std::to_string(tanks[id].getX()) + " " + std::to_string(tanks[id].getY()) + " " + std::to_string(tanks[id].getCourse());
+	std::string msg = std::to_string(id) + " " + std::to_string(tanks[id].getX()) + " " + std::to_string(tanks[id].getY()) + " " + std::to_string(tanks[id].getCourse()) +"3";
 	sent_message(client_array, iResult, msg);
 }
 
@@ -202,7 +202,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 
 				closesocket(new_client.socket);
 				closesocket(client_array[new_client.id].socket);
-				client_array[new_client.id].socket = INVALID_SOCKET;
+				//client_array[new_client.id].socket = INVALID_SOCKET;
 				break;
 			}
 		}

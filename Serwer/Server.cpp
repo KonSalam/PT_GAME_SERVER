@@ -87,11 +87,11 @@ void Server::run()
 
 			//Create a thread process for that client
 			my_thread[temp_id] = std::thread(process_client, std::ref(client[temp_id]), std::ref(client), std::ref(my_thread[temp_id]), tanks);
-			Sleep(100);
+			Sleep(150);
 			for (int i = 0; i < 4; i++){
 				msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY()) + " " + std::to_string(tanks[i].getCourse()) + " " + std::to_string(0);
 				//std::cout <<msg<< std::endl;
-				Sleep(150);
+				Sleep(400);
 				send(client[temp_id].socket, msg.c_str(), strlen(msg.c_str()), 0);
 			}
 		}

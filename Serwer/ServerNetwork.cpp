@@ -101,7 +101,6 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 				if (tanks[j].getLife() == 0)continue;
 				if (i == tanks[j].getX() && p == tanks[j].getY())
 				{
-					std::cout << "TRAFILEM CHUJA " << std::endl;
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
 					break;
@@ -116,7 +115,6 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 				if (tanks[j].getLife() == 0)continue;
 				if (i == tanks[j].getX() && p == tanks[j].getY())
 				{
-					std::cout << "TRAFILEM CHUJA " << std::endl;
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
 					break;
@@ -151,7 +149,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 
 			if (iResult != SOCKET_ERROR)
 			{
-				if (strcmp(tempmsg, "72") == 0)//gora
+				if (strcmp(tempmsg, "82") == 0)//gora
 				{
 					tanks[new_client.id].setY(tanks[new_client.id].getY() - 5);
 					tanks[new_client.id].setCourse(2);
@@ -159,7 +157,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 						tanks[new_client.id].setY(tanks[new_client.id].getY() + 5);
 					}
 				}
-				else if (strcmp(tempmsg, "80") == 0)//dol
+				else if (strcmp(tempmsg, "81") == 0)//dol
 				{
 					tanks[new_client.id].setY(tanks[new_client.id].getY() + 5);
 					tanks[new_client.id].setCourse(1);
@@ -167,7 +165,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 						tanks[new_client.id].setY(tanks[new_client.id].getY() - 5);
 					}
 				}
-				else if (strcmp(tempmsg, "75") == 0)//lewo
+				else if (strcmp(tempmsg, "80") == 0)//lewo
 				{
 					tanks[new_client.id].setX(tanks[new_client.id].getX() - 5);
 					tanks[new_client.id].setCourse(3);
@@ -175,7 +173,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 						tanks[new_client.id].setX(tanks[new_client.id].getX() + 5);
 					}
 				}
-				else if (strcmp(tempmsg, "77") == 0)//prawo
+				else if (strcmp(tempmsg, "79") == 0)//prawo
 				{
 					tanks[new_client.id].setX(tanks[new_client.id].getX() + 5);
 					tanks[new_client.id].setCourse(4);
@@ -183,7 +181,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 						tanks[new_client.id].setX(tanks[new_client.id].getX() - 5);
 					}
 				}
-				else if (strcmp(tempmsg, "115") == 0)//strzal
+				else if (strcmp(tempmsg, "22") == 0)//strzal
 				{
 					msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY()) + " " + std::to_string(tanks[new_client.id].getCourse()) + " " + std::to_string(1);
 					sent_message(client_array, iResult, msg);

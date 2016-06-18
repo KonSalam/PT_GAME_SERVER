@@ -70,9 +70,11 @@ void Server::run()
 		{
 			if (client[i].socket == INVALID_SOCKET && temp_id == -1)
 			{
-				client[i].socket = incoming;
-				client[i].id = i;
-				temp_id = i;
+				if (tanks[i].getLife() != 0){
+					client[i].socket = incoming;
+					client[i].id = i;
+					temp_id = i;
+				}
 			}
 			if (client[i].socket != INVALID_SOCKET)
 				num_clients++;
@@ -87,9 +89,14 @@ void Server::run()
 
 			//Create a thread process for that client
 			my_thread[temp_id] = std::thread(process_client, std::ref(client[temp_id]), std::ref(client), std::ref(my_thread[temp_id]), tanks);
-			Sleep(150);
+			Sleep(180);
 			for (int i = 0; i < 4; i++){
-				msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY()) + " " + std::to_string(tanks[i].getCourse()) + " " + std::to_string(0);
+				if (tanks[i].getLife() != 0){
+					msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY()) + " " + std::to_string(tanks[i].getCourse()) + " " + std::to_string(0);
+				}
+				else{
+					msg = std::to_string(i) + " " + std::to_string(tanks[i].getX()) + " " + std::to_string(tanks[i].getY()) + " " + std::to_string(tanks[i].getCourse()) + " " + std::to_string(3);
+				}
 				//std::cout <<msg<< std::endl;
 				Sleep(400);
 				send(client[temp_id].socket, msg.c_str(), strlen(msg.c_str()), 0);

@@ -25,7 +25,7 @@ void disconnected(int id, Tank tanks[], int iResult, std::vector<client_type> &c
 		tanks[3].setDead();
 		break;
 	}
-	std::string msg = std::to_string(id) + " " + std::to_string(tanks[id].getX()) + " " + std::to_string(tanks[id].getY()) + " " + std::to_string(tanks[id].getCourse()) +"3";
+	std::string msg = std::to_string(id) + " " + std::to_string(tanks[id].getX()) + " " + std::to_string(tanks[id].getY()) + " " + std::to_string(tanks[id].getCourse()) + " " + std::to_string(3);
 	sent_message(client_array, iResult, msg);
 }
 
@@ -71,7 +71,7 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 				if (tanks[j].getLife() == 0)continue;
 				if (i == tanks[j].getY() && p == tanks[j].getX())
 				{
-					std::cout << "TRAFILEM CHUJA " <<std::endl;
+					std::cout << "TRAFILEM CHUJA " << std::endl;
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
 					break;
@@ -86,8 +86,8 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 				if (tanks[j].getLife() == 0)continue;
 				if (i == tanks[j].getY() && p == tanks[j].getX())
 				{
-					std::cout << "TRAFILEM CHUJA " <<std::endl;
-					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;	
+					std::cout << "TRAFILEM CHUJA " << std::endl;
+					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
 					break;
 				}
@@ -187,7 +187,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				{
 					msg = std::to_string(new_client.id) + " " + std::to_string(tanks[new_client.id].getX()) + " " + std::to_string(tanks[new_client.id].getY()) + " " + std::to_string(tanks[new_client.id].getCourse()) + " " + std::to_string(1);
 					sent_message(client_array, iResult, msg);
-					shoot(tanks, new_client.id,client_array,iResult);
+					shoot(tanks, new_client.id, client_array, iResult);
 					continue;
 				}
 
@@ -203,6 +203,7 @@ int process_client(client_type &new_client, std::vector<client_type> &client_arr
 				closesocket(new_client.socket);
 				closesocket(client_array[new_client.id].socket);
 				//client_array[new_client.id].socket = INVALID_SOCKET;
+
 				break;
 			}
 		}

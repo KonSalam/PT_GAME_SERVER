@@ -69,9 +69,8 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 			{
 				if (id == j) continue;
 				if (tanks[j].getLife() == 0)continue;
-				if (i == tanks[j].getY() && p == tanks[j].getX())
+				if (i == tanks[j].getY() && (p > tanks[j].getX()-25 && p < tanks[j].getX()+25))
 				{
-					std::cout << "TRAFILEM CHUJA " << std::endl;
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
 					break;
@@ -84,9 +83,8 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 			for (int j = 0; j < 4; j++){
 				if (id == j) continue;
 				if (tanks[j].getLife() == 0)continue;
-				if (i == tanks[j].getY() && p == tanks[j].getX())
+				if (i == tanks[j].getY() && (p > tanks[j].getX() - 25 && p < tanks[j].getX() + 25))
 				{
-					std::cout << "TRAFILEM CHUJA " << std::endl;
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
 					break;
@@ -99,7 +97,7 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 			for (int j = 0; j < 4; j++){
 				if (id == j) continue;
 				if (tanks[j].getLife() == 0)continue;
-				if (i == tanks[j].getX() && p == tanks[j].getY())
+				if (i == tanks[j].getX() && (p > tanks[j].getY() - 25 && p < tanks[j].getY() + 25))
 				{
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
@@ -113,7 +111,7 @@ void shoot(Tank tanks[], int id, std::vector<client_type> &client_array, int iRe
 			for (int j = 0; j < 4; j++){
 				if (id == j) continue;
 				if (tanks[j].getLife() == 0)continue;
-				if (i == tanks[j].getX() && p == tanks[j].getY())
+				if (i == tanks[j].getX() && (p > tanks[j].getY() - 25 && p < tanks[j].getY() + 25))
 				{
 					std::cout << tanks[j].getX() << " " << tanks[j].getY() << std::endl;
 					target = j;
